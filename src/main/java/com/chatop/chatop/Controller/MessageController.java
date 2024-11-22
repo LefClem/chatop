@@ -5,12 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path="/api")
+@RequestMapping(path="/api/messages")
 public class MessageController {
     @Autowired
     private MessageService messageService;
 
-    @PostMapping(path="/message")
+    @PostMapping(path="/")
     public @ResponseBody String addNewMessage(@RequestParam String message){
         try{
             messageService.createMessage(message);

@@ -9,24 +9,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path="/api")
+@RequestMapping(path="/api/auth")
 public class UserController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private UserService userService;
 
-    @GetMapping(path="/all")
-    public @ResponseBody Iterable<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    @GetMapping(path = "/user/{id}")
+    @GetMapping(path = "/{id}")
     public @ResponseBody Optional<User> getUserName (@PathVariable Integer id){
         return userRepository.findById(Long.valueOf(id));
     }
 
-    @PostMapping(path="/add") // Map ONLY POST Requests
+    @PostMapping(path="/register") // Map ONLY POST Requests
     public @ResponseBody String addNewUser (@RequestParam String name
             , @RequestParam String email, @RequestParam String password) {
         // @ResponseBody means the returned String is the response, not a view name
