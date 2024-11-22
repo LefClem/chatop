@@ -25,7 +25,7 @@ public class JWTService {
                 .issuer("self")
                 .issuedAt(now)
                 .expiresAt(now.plus(1, ChronoUnit.DAYS))
-//                .subject(authentication.getName())
+                .subject(authentication.getName())
                 .build();
         JwtEncoderParameters jwtEncoderParameters = JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS256).build(), claims);
         System.out.println(authentication);
