@@ -20,4 +20,8 @@ public class Rental {
     private String description;
     private Date created_at;
     private Date updated_at;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
 }

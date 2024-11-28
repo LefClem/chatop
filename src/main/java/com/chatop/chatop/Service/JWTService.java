@@ -28,7 +28,6 @@ public class JWTService {
                 .subject(authentication.getName())
                 .build();
         JwtEncoderParameters jwtEncoderParameters = JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS256).build(), claims);
-        System.out.println(authentication);
         return  this.jwtEncoder.encode(jwtEncoderParameters).getTokenValue();
     }
 }

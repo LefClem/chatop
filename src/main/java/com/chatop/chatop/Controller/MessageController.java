@@ -14,7 +14,8 @@ public class MessageController {
     public @ResponseBody String addNewMessage(@RequestParam String message){
         try{
             messageService.createMessage(message);
-            return "New message added";
+
+            return "New message added : " + message;
         }catch (Exception e){
             return "Error :" + e.getMessage();
         }

@@ -7,10 +7,8 @@ import lombok.Setter;
 
 import java.util.Date;
 
-@Entity
 @Data
-@Getter
-@Setter
+@Entity
 @Table(name="USERS")
 public class User {
     @Id

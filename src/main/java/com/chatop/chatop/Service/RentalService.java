@@ -5,13 +5,15 @@ import com.chatop.chatop.Repository.RentalRepository;
 import com.chatop.chatop.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class RentalService {
     @Autowired
-    private RentalRepository rentalRespository;
+    private RentalRepository rentalRepository;
     @Autowired
     private UserRepository userRepository;
 
@@ -26,11 +28,15 @@ public class RentalService {
         n.setUpdated_at(new Date());
 
         //n.setOwner();
-        rentalRespository.save(n);
+        rentalRepository.save(n);
         return "OK";
     }
 
     public Iterable<Rental> displayRentals(){
-        return rentalRespository.findAll();
+        return rentalRepository.findAll();
+    }
+
+    public Optional<Rental> displayRentalById(@PathVariable Integer id){
+        return rentalRepository.findById(Long.valueOf(id));
     }
 }
