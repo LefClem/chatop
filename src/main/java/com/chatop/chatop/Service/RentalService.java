@@ -1,6 +1,8 @@
 package com.chatop.chatop.Service;
 
-import com.chatop.chatop.Model.Rental;
+import com.chatop.chatop.Entity.Rental;
+import com.chatop.chatop.Entity.User;
+import com.chatop.chatop.Model.RentalDTO;
 import com.chatop.chatop.Repository.RentalRepository;
 import com.chatop.chatop.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +19,32 @@ public class RentalService {
     @Autowired
     private UserRepository userRepository;
 
-    public String createRental(String name, Float surface, Float price, String picture, String description){
+    public String createRental(RentalDTO rentalDTO, User id){
         Rental n = new Rental();
-        n.setName(name);
-        n.setSurface(surface);
-        n.setPrice(price);
-        n.setPicture(picture);
-        n.setDescription(description);
+        n.setName(rentalDTO.name);
+        n.setSurface(rentalDTO.surface);
+        n.setPrice(rentalDTO.price);
+        n.setPicture(rentalDTO.picture);
+        n.setDescription(rentalDTO.description);
         n.setCreated_at(new Date());
         n.setUpdated_at(new Date());
 
-        //n.setOwner();
+        n.setOwner(id);
         rentalRepository.save(n);
+        return "OK";
+    }
+
+    public String updateRental(RentalDTO rentalDTO, Rental rental){
+        rental.setName(rentalDTO.name);
+        rental.setSurface(rentalDTO.surface);
+        rental.setPrice(rentalDTO.price);
+        rental.setPicture(rentalDTO.picture);
+        rental.setDescription(rentalDTO.description);
+        rental.setCreated_at(new Date());
+        rental.setUpdated_at(new Date());
+
+        //n.setOwner();
+        rentalRepository.save(rental);
         return "OK";
     }
 

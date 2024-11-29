@@ -1,4 +1,4 @@
-package com.chatop.chatop.Model;
+package com.chatop.chatop.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

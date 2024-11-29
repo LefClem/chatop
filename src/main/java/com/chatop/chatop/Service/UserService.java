@@ -1,6 +1,6 @@
 package com.chatop.chatop.Service;
 
-import com.chatop.chatop.Model.User;
+import com.chatop.chatop.Entity.User;
 import com.chatop.chatop.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

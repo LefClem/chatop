@@ -1,4 +1,4 @@
-package com.chatop.chatop.Model;
+package com.chatop.chatop.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -16,4 +16,10 @@ public class Message {
     private String message;
     private Date created_at;
     private Date updated_at;
+
+    @ManyToOne
+    User user;
+
+    @ManyToOne
+    Rental rental;
 }

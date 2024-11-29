@@ -1,5 +1,6 @@
 package com.chatop.chatop.Service;
 
+import com.chatop.chatop.Entity.CustomUserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
@@ -21,11 +22,14 @@ public class JWTService {
 
     public String generateToken(Authentication authentication){
         Instant now = Instant.now();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Integer userId = userDetails.getId();
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("self")
                 .issuedAt(now)
                 .expiresAt(now.plus(1, ChronoUnit.DAYS))
                 .subject(authentication.getName())
+                .claim("id", userId)
                 .build();
         JwtEncoderParameters jwtEncoderParameters = JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS256).build(), claims);
         return  this.jwtEncoder.encode(jwtEncoderParameters).getTokenValue();

@@ -1,9 +1,7 @@
-package com.chatop.chatop.Model;
+package com.chatop.chatop.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Date;
 

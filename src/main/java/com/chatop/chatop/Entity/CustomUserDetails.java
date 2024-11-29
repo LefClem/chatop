@@ -1,4 +1,4 @@
-package com.chatop.chatop.Model;
+package com.chatop.chatop.Entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,5 +26,9 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public String getUsername() {
         return user.getEmail();
+    }
+
+    public Integer getId() {
+        return user.getId();
     }
 }

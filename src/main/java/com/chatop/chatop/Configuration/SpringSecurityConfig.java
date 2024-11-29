@@ -1,9 +1,8 @@
 package com.chatop.chatop.Configuration;
 
-import com.chatop.chatop.Model.CustomUserDetails;
+import com.chatop.chatop.Entity.CustomUserDetails;
 import com.chatop.chatop.Repository.UserRepository;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +11,6 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,9 +20,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.crypto.spec.SecretKeySpec;
 
@@ -38,8 +34,6 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
                         .anyRequest().authenticated())
-                //.httpBasic((Customizer.withDefaults()))
-                //.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
                 .build();
     }
@@ -49,8 +43,8 @@ public class SpringSecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
-    //@Value("${app.secret-key}")
-    private String jwtKey = "secret";
+    @Value("${app.secret-key}")
+    private String jwtKey;
 
     @Bean
     public JwtDecoder jwtDecoder() {
@@ -68,16 +62,9 @@ public class SpringSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    public UserDetailsService users() {
-//        UserDetails user = User.builder().username("user").password(passwordEncoder().encode("password")).build();
-//        return new InMemoryUserDetailsManager(user);
-//    }
-
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
         return email -> {
-            System.out.println("Attempting to load user by email: " + email);
             return (UserDetails) userRepository.findByEmail(email)
                     .map(CustomUserDetails::new)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
