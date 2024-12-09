@@ -16,10 +16,12 @@ public class Message {
     private String message;
     private Date created_at;
     private Date updated_at;
+    private Integer user_id;
+    private Integer rental_id;
 
-    @ManyToOne
-    User user;
-
-    @ManyToOne
-    Rental rental;
+//    @ManyToOne
+//    User user;
+//
+//    @ManyToOne
+//    Rental rental;
 }

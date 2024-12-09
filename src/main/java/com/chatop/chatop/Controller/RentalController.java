@@ -1,17 +1,29 @@
 package com.chatop.chatop.Controller;
 
+import com.chatop.chatop.DTO.RentalsListDto;
+import com.chatop.chatop.DTO.RentalsResponseDto;
+import com.chatop.chatop.DTO.UserDTO;
 import com.chatop.chatop.Entity.Rental;
 import com.chatop.chatop.Entity.User;
 import com.chatop.chatop.Model.RentalDTO;
 import com.chatop.chatop.Repository.RentalRepository;
 import com.chatop.chatop.Service.RentalService;
+import com.chatop.chatop.Service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.swing.text.html.Option;
 import java.util.Date;
 import java.util.Optional;
 
@@ -23,54 +35,114 @@ public class RentalController {
     @Autowired
     private  RentalRepository rentalRepository;
     @Autowired
-    private UserController userController;
+    private UserService userService;
 
-    private User getAuthenticatedUser(){
-        return userController.getUser();
+    private UserDTO getAuthenticatedUser(){
+        return userService.getAuthUser().get();
     }
 
-    @PostMapping(path="/")
-    public @ResponseBody String addNewRental(@RequestBody RentalDTO rentalDTO){
+    @Operation(summary = "Rental creation", description = "Add a new rental in database")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Rental created !",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Rental.class))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content)
+    })
+    @PostMapping(path="")
+    public @ResponseBody RentalsResponseDto addNewRental(
+            @RequestParam String name,
+            @RequestParam Float surface,
+            @RequestParam Float price,
+            @RequestParam MultipartFile picture,
+            @RequestParam String description
+            ){
         try{
-            User id = getAuthenticatedUser();
-            rentalService.createRental(rentalDTO, id);
-            return "Rental created !";
+            Integer id = getAuthenticatedUser().getId();
+            rentalService.createRental(name, surface, price, picture, description, id);
+            return RentalsResponseDto.builder().message("Rental created !").build();
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: " + e.getMessage());
         }
     }
 
+    @Operation(summary = "Rental update", description = "Update an existing rental by finding it with his id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Rental updated !",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Rental.class))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content)
+    })
     @PutMapping(path = "/{id}")
-    public @ResponseBody String updateRental(@PathVariable Integer id, @RequestBody RentalDTO rentalDTO){
+    public @ResponseBody RentalsResponseDto updateRental(
+            @PathVariable Integer id,
+            @RequestParam String name,
+            @RequestParam Float surface,
+            @RequestParam Float price,
+            @RequestParam String description
+    ){
         try {
             Optional<Rental> rentalOptional = rentalRepository.findById(Long.valueOf(id));
                 if(rentalOptional.isPresent()){
                     Rental rental = rentalOptional.get();
-                    if(rental.getOwner().getId().equals(getAuthenticatedUser().getId())){
-                        rentalService.updateRental(rentalDTO, rental);
+                    if(rental.getOwner_id().equals(getAuthenticatedUser().getId())){
+                        rentalService.updateRental(name, surface, price, description, rental);
                     } else {
-                        return "You are not authorized to do this operation !";
+                        return RentalsResponseDto.builder().message("You are not authorized !").build();
                     }
                 }
-                return "Rental updated !";
+            return RentalsResponseDto.builder().message("Rental updated !").build();
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: " + e.getMessage());
         }
     };
 
-    @GetMapping(path = "/")
-    public @ResponseBody Iterable<Rental> getAllRentals(){
+    @Operation(summary = "Rental list", description = "Get a list of all the rentals")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "[{\n" +
+                    "\t\"id\": 1,\n" +
+                    "\t\"name\": \"dream house\",\n" +
+                    "\t\"surface\": 24,\n" +
+                    "\t\"price\": 30,\n" +
+                    "\t\"picture\": [\"https://blog.technavio.org/wp-content/uploads/2018/12/Online-House-Rental-Sites.jpg\"],\n" +
+                    "\t\"description\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a lectus eleifend, varius massa ac, mollis tortor. Quisque ipsum nulla, faucibus ac metus a, eleifend efficitur augue. Integer vel pulvinar ipsum. Praesent mollis neque sed sagittis ultricies. Suspendisse congue ligula at justo molestie, eget cursus nulla tincidunt. Pellentesque elementum rhoncus arcu, viverra gravida turpis mattis in. Maecenas tempor elementum lorem vel ultricies. Nam tempus laoreet eros, et viverra libero tincidunt a. Nunc vel nisi vulputate, sodales massa eu, varius erat.\",\n" +
+                    "\t\"owner_id\": 1,\n" +
+                    "\t\"created_at\": \"2012/12/02\",\n" +
+                    "\t\"updated_at\": \"2014/12/02\"  \n" +
+                    "}]",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Rental.class))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content)
+    })
+    @GetMapping(path = "")
+    public @ResponseBody ResponseEntity<RentalsListDto> getAllRentals(){
         try{
-            return rentalService.displayRentals();
+            return ResponseEntity.ok(rentalService.displayRentals());
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: " + e.getMessage());
         }
     }
 
+    @Operation(summary = "Rental by id", description = "Get a rental by his id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "{\n" +
+                    "\t\"id\": 1,\n" +
+                    "\t\"name\": \"dream house\",\n" +
+                    "\t\"surface\": 24,\n" +
+                    "\t\"price\": 30,\n" +
+                    "\t\"picture\": [\"https://blog.technavio.org/wp-content/uploads/2018/12/Online-House-Rental-Sites.jpg\"],\n" +
+                    "\t\"description\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a lectus eleifend, varius massa ac, mollis tortor. Quisque ipsum nulla, faucibus ac metus a, eleifend efficitur augue. Integer vel pulvinar ipsum. Praesent mollis neque sed sagittis ultricies. Suspendisse congue ligula at justo molestie, eget cursus nulla tincidunt. Pellentesque elementum rhoncus arcu, viverra gravida turpis mattis in. Maecenas tempor elementum lorem vel ultricies. Nam tempus laoreet eros, et viverra libero tincidunt a. Nunc vel nisi vulputate, sodales massa eu, varius erat.\",\n" +
+                    "\t\"owner_id\": 1,\n" +
+                    "\t\"created_at\": \"2012/12/02\",\n" +
+                    "\t\"updated_at\": \"2014/12/02\"  \n" +
+                    "}",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Rental.class))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content)
+    })
     @GetMapping(path="/{id}")
-    public @ResponseBody Optional<Rental> getRentalById(@PathVariable Integer id){
+    public @ResponseBody ResponseEntity<Optional<RentalDTO>> getRentalById(@PathVariable Integer id){
         try {
-            return rentalService.displayRentalById(id);
+            return ResponseEntity.ok(rentalService.displayRentalById(id));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: " + e.getMessage());
         }

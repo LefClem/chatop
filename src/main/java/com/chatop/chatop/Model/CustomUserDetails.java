@@ -1,5 +1,6 @@
-package com.chatop.chatop.Entity;
+package com.chatop.chatop.Model;
 
+import com.chatop.chatop.Entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

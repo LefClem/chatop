@@ -1,8 +1,20 @@
 package com.chatop.chatop.Controller;
 
+import com.chatop.chatop.DTO.MessageDtoResponse;
+import com.chatop.chatop.DTO.UserDTO;
+import com.chatop.chatop.Entity.Message;
+import com.chatop.chatop.Entity.Rental;
 import com.chatop.chatop.Entity.User;
+import com.chatop.chatop.Model.MessageRequest;
 import com.chatop.chatop.Service.MessageService;
+import com.chatop.chatop.Service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -11,22 +23,26 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
     @Autowired
-    private UserController userController;
+    private UserService userService;
 
-    private User getAuthenticatedUser(){
-        return userController.getUser();
+    private UserDTO getAuthenticatedUser(){
+        return userService.getAuthUser().get();
     }
 
-
-    @PostMapping(path="/")
-    public @ResponseBody String addNewMessage(@RequestParam String message){
+    @Operation(summary = "Message creation", description = "Create a new message in database")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "message : messsage send with success",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content)
+    })
+    @PostMapping(path="")
+    public @ResponseBody ResponseEntity<MessageDtoResponse> addNewMessage(@RequestBody MessageRequest messageRequest){
         try{
-            User id = getAuthenticatedUser();
-            messageService.createMessage(message, id);
-
-            return "message : " + message;
+            Integer id = getAuthenticatedUser().getId();
+            return ResponseEntity.ok(messageService.createMessage(messageRequest, id));
         }catch (Exception e){
-            return "Error :" + e.getMessage();
+            throw new RuntimeException(e);
         }
     }
 }

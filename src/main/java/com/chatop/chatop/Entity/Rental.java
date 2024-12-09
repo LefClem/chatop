@@ -21,7 +21,5 @@ public class Rental {
     private Date created_at;
     private Date updated_at;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
-    private User owner;
+    private Integer owner_id;
 }
