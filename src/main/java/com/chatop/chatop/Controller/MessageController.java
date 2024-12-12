@@ -1,11 +1,9 @@
 package com.chatop.chatop.Controller;
 
+import com.chatop.chatop.DTO.MessageDtoRequest;
 import com.chatop.chatop.DTO.MessageDtoResponse;
 import com.chatop.chatop.DTO.UserDTO;
 import com.chatop.chatop.Entity.Message;
-import com.chatop.chatop.Entity.Rental;
-import com.chatop.chatop.Entity.User;
-import com.chatop.chatop.Model.MessageRequest;
 import com.chatop.chatop.Service.MessageService;
 import com.chatop.chatop.Service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,10 +35,10 @@ public class MessageController {
                     content = @Content)
     })
     @PostMapping(path="")
-    public @ResponseBody ResponseEntity<MessageDtoResponse> addNewMessage(@RequestBody MessageRequest messageRequest){
+    public @ResponseBody ResponseEntity<MessageDtoResponse> addNewMessage(@RequestBody MessageDtoRequest messageDtoRequest){
         try{
             Integer id = getAuthenticatedUser().getId();
-            return ResponseEntity.ok(messageService.createMessage(messageRequest, id));
+            return ResponseEntity.ok(messageService.createMessage(messageDtoRequest, id));
         }catch (Exception e){
             throw new RuntimeException(e);
         }

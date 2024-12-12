@@ -1,7 +1,6 @@
 package com.chatop.chatop.Controller;
 
 import com.chatop.chatop.DTO.UserDTO;
-import com.chatop.chatop.Repository.UserRepository;
 import com.chatop.chatop.Service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,8 +17,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping(path="/api/user")
 public class UserController {
-    @Autowired
-    UserRepository userRepository;
     @Autowired
     UserService userService;
 

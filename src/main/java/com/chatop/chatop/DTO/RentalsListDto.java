@@ -1,6 +1,5 @@
 package com.chatop.chatop.DTO;
 
-import com.chatop.chatop.Model.RentalDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

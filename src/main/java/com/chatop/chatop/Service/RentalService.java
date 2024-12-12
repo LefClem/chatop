@@ -2,7 +2,7 @@ package com.chatop.chatop.Service;
 
 import com.chatop.chatop.DTO.RentalsListDto;
 import com.chatop.chatop.Entity.Rental;
-import com.chatop.chatop.Model.RentalDTO;
+import com.chatop.chatop.DTO.RentalDTO;
 import com.chatop.chatop.Repository.RentalRepository;
 import com.chatop.chatop.Repository.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -26,14 +26,6 @@ public class RentalService {
     private UserRepository userRepository;
     @Autowired
     private ModelMapper modelMapper;
-
-    @Value("${app.base_url.dev}")
-    private String baseUrl;
-
-    public String formatUrlPicture(String picture){
-//        TODO: check for the picture url !
-        return baseUrl + picture;
-    }
 
     public Rental createRental(String name, Float surface, Float price, MultipartFile picture, String description, Integer id) throws IOException {
         Rental n = new Rental();

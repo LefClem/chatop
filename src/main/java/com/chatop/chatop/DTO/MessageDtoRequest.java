@@ -18,5 +18,5 @@ public class MessageDtoRequest {
     private Long user_id;
     @Schema(description = "ID of the rental associated with the message", required = true, example = "1")
     @NotNull
-    private Long rental_id;
+    private Integer rental_id;
 }

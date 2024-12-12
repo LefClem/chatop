@@ -4,8 +4,7 @@ import com.chatop.chatop.DTO.RentalsListDto;
 import com.chatop.chatop.DTO.RentalsResponseDto;
 import com.chatop.chatop.DTO.UserDTO;
 import com.chatop.chatop.Entity.Rental;
-import com.chatop.chatop.Entity.User;
-import com.chatop.chatop.Model.RentalDTO;
+import com.chatop.chatop.DTO.RentalDTO;
 import com.chatop.chatop.Repository.RentalRepository;
 import com.chatop.chatop.Service.RentalService;
 import com.chatop.chatop.Service.UserService;
@@ -17,14 +16,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.swing.text.html.Option;
-import java.util.Date;
 import java.util.Optional;
 
 @RestController
@@ -98,17 +93,7 @@ public class RentalController {
 
     @Operation(summary = "Rental list", description = "Get a list of all the rentals")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "[{\n" +
-                    "\t\"id\": 1,\n" +
-                    "\t\"name\": \"dream house\",\n" +
-                    "\t\"surface\": 24,\n" +
-                    "\t\"price\": 30,\n" +
-                    "\t\"picture\": [\"https://blog.technavio.org/wp-content/uploads/2018/12/Online-House-Rental-Sites.jpg\"],\n" +
-                    "\t\"description\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a lectus eleifend, varius massa ac, mollis tortor. Quisque ipsum nulla, faucibus ac metus a, eleifend efficitur augue. Integer vel pulvinar ipsum. Praesent mollis neque sed sagittis ultricies. Suspendisse congue ligula at justo molestie, eget cursus nulla tincidunt. Pellentesque elementum rhoncus arcu, viverra gravida turpis mattis in. Maecenas tempor elementum lorem vel ultricies. Nam tempus laoreet eros, et viverra libero tincidunt a. Nunc vel nisi vulputate, sodales massa eu, varius erat.\",\n" +
-                    "\t\"owner_id\": 1,\n" +
-                    "\t\"created_at\": \"2012/12/02\",\n" +
-                    "\t\"updated_at\": \"2014/12/02\"  \n" +
-                    "}]",
+            @ApiResponse(responseCode = "200", description = "List of rentals",
                     content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Rental.class))}),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content)
@@ -124,17 +109,7 @@ public class RentalController {
 
     @Operation(summary = "Rental by id", description = "Get a rental by his id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "{\n" +
-                    "\t\"id\": 1,\n" +
-                    "\t\"name\": \"dream house\",\n" +
-                    "\t\"surface\": 24,\n" +
-                    "\t\"price\": 30,\n" +
-                    "\t\"picture\": [\"https://blog.technavio.org/wp-content/uploads/2018/12/Online-House-Rental-Sites.jpg\"],\n" +
-                    "\t\"description\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a lectus eleifend, varius massa ac, mollis tortor. Quisque ipsum nulla, faucibus ac metus a, eleifend efficitur augue. Integer vel pulvinar ipsum. Praesent mollis neque sed sagittis ultricies. Suspendisse congue ligula at justo molestie, eget cursus nulla tincidunt. Pellentesque elementum rhoncus arcu, viverra gravida turpis mattis in. Maecenas tempor elementum lorem vel ultricies. Nam tempus laoreet eros, et viverra libero tincidunt a. Nunc vel nisi vulputate, sodales massa eu, varius erat.\",\n" +
-                    "\t\"owner_id\": 1,\n" +
-                    "\t\"created_at\": \"2012/12/02\",\n" +
-                    "\t\"updated_at\": \"2014/12/02\"  \n" +
-                    "}",
+            @ApiResponse(responseCode = "200", description = "Rental found by his id",
                     content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Rental.class))}),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content)

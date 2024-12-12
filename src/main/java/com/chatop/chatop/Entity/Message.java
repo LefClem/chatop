@@ -18,10 +18,4 @@ public class Message {
     private Date updated_at;
     private Integer user_id;
     private Integer rental_id;
-
-//    @ManyToOne
-//    User user;
-//
-//    @ManyToOne
-//    Rental rental;
 }

@@ -19,13 +19,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
-
-        import java.util.Collections;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -42,22 +37,10 @@ public class AuthController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    @Operation(summary = "User id", description = "Return the informations of a user by his id")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful login",
-                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
-            @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = @Content)
-    })
-    @GetMapping(path = "/{id}")
-    public @ResponseBody Optional<User> getUserById(@PathVariable Integer id){
-        return userRepository.findById(Long.valueOf(id));
-    }
-
     @Operation(summary = "User me", description = "return the credentials of the logged user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful login",
-                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
+            @ApiResponse(responseCode = "200", description = "Return the logged user",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class))}),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content)
     })
@@ -68,8 +51,8 @@ public class AuthController {
 
     @Operation(summary = "User register", description = "Create a user in Database and log him")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful login",
-                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
+            @ApiResponse(responseCode = "200", description = "token : jwt",
+                    content = { @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class))}),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content)
     })
@@ -91,7 +74,7 @@ public class AuthController {
 
     @Operation(summary = "User login", description = "Authenticate user and return a JWT token")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful login",
+            @ApiResponse(responseCode = "200", description = "token : jwt",
                     content = { @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content)
