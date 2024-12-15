@@ -1,55 +1,44 @@
-# Estate
+# ChatOp
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.1.0.
+Welcome to the ChatOp project ! It's a web application that displays rental ads for the holidays. 
+The homeowner can create an ad with their informations and the users can send message to the homeowners for more informations.
 
-## Start the project
+## Prérequis
 
-Git clone:
+Java 11 or 17
+Spring Boot 3
+MySQL
+Node.js et npm (for the Angular project)
 
-> git clone https://github.com/OpenClassrooms-Student-Center/P3-Full-Stack-portail-locataire
+## Installation
+
+Clone the repository
+git clone https://github.com/LefClem/chatop.git
 
 Go inside folder:
 
-> cd P3-Full-Stack-portail-locataire
+cd chatop
 
+Creation of the database
+CREATE DATABASE chatop;
+
+Update the file application.properties with the connexion information of the database.
+
+Creation of the tables
+When you will launch the project, Spring will automatically execute the sql script !
+
+Launch the back-end
+Run the WebappApplication file or use teh command mvn spring-boot:run    
+
+Launch the front-end
 Install dependencies:
 
-> npm install
+npm install
 
 Launch Front-end:
 
-> npm run start;
+npm run start
 
+## Documentation
 
-## Ressources
-
-### Mockoon env
-
-Download Mockoon here: https://mockoon.com/download/
-
-After installing you could load the environement
-
-> ressources/mockoon/rental-oc.json
-
-directly inside Mockoon 
-
-> File > Open environmement
-
-For launching the Mockoon server click on play bouton
-
-Mockoon documentation: https://mockoon.com/docs/latest/about/
-
-### Postman collection
-
-For Postman import the collection
-
-> ressources/postman/rental.postman_collection.json 
-
-by following the documentation: 
-
-https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-data-into-postman
-
-
-### MySQL
-
-SQL script for creating the schema is available `ressources/sql/script.sql`
+You can access the swagger documentation of the API via this url : http://localhost:3001/swagger-ui/index.html
