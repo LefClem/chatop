@@ -5,10 +5,10 @@ The homeowner can create an ad with their informations and the users can send me
 
 ## Prérequis
 
-Java 11 or 17
-Spring Boot 3
-MySQL
-Node.js et npm (for the Angular project)
+- Java 11 or 17
+- Spring Boot 3
+- MySQL
+- Node.js 
 
 ## Installation
 
