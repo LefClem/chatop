@@ -12,30 +12,33 @@ Node.js et npm (for the Angular project)
 
 ## Installation
 
-#Clone the repository
+- Clone the repository
 git clone https://github.com/LefClem/chatop.git
 
-#Creation of the database
-CREATE DATABASE chatop;
+- Installation of the database
 
-Update the file application.properties with the connexion information of the database.
+You need to install MySQL on your machine or a DBMS like MysqlWorkbench, launch it and connect with your credentials.
 
-#Go inside folder:
-cd chatop
+When Mysql is launch, create a new Database with this command: CREATE DATABASE chatop;
 
-#Creation of the tables
+Update the file application.properties in the folder Chatop-server/src/main
+/resources with the connexion information of the database.
+
+- Creation of the tables
 When you will launch the project, Spring will automatically execute the sql script and create the tables.
 
-##Launch the back-end
-Run the WebappApplication file or use the command mvn spring-boot:run    
+- Launch the backend
 
-##Launch the front-end
+Use the command mvn spring-boot:run or the start command of your IDE
+ 
 
-#Install dependencies:
-npm install
+## Frontend
 
-#Start the application:
-npm run start
+- Install dependencies:
+Run the command npm install
+
+- Start the application:
+Run the command npm run start or ng serve
 
 ## Documentation
 
