@@ -21,8 +21,9 @@ You need to install MySQL on your machine or a DBMS like MysqlWorkbench, launch 
 
 When Mysql is launch, create a new Database with this command: CREATE DATABASE chatop;
 
-Update the file application.properties in the folder Chatop-server/src/main
-/resources with the connexion information of the database.
+Update the file application.properties in the folder Chatop-server/src/main/resources with the connexion information of the database:
+- spring.datasource.username
+- spring.datasource.password
 
 - Creation of the tables
 When you will launch the project, Spring will automatically execute the sql script and create the tables.
