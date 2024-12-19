@@ -10,12 +10,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import java.util.Optional;
 
 
 @RestController
 @RequestMapping(path="/api/user")
+@SecurityRequirement(name="bearerAuth")
 public class UserController {
     @Autowired
     UserService userService;

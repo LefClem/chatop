@@ -22,6 +22,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 
 @RestController
 @RequestMapping(path="/api/auth")
@@ -44,6 +46,7 @@ public class AuthController {
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content)
     })
+    @SecurityRequirement(name="bearerAuth")
     @GetMapping(path = "/me")
     public @ResponseBody ResponseEntity<Optional<UserDTO>> getUser(){
         return ResponseEntity.ok(userService.getAuthUser());
@@ -89,7 +92,6 @@ public class AuthController {
             TokenDto tokenDto = new TokenDto(token);
             return ResponseEntity.ok(tokenDto);
         } catch (AuthenticationException e) {
-            System.out.println("Authentication failed: " + e.getMessage());
             throw new RuntimeException("Invalid Username or password");
         }
     }
