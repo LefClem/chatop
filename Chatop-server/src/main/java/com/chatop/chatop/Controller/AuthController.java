@@ -63,7 +63,6 @@ public class AuthController {
     public @ResponseBody ResponseEntity<TokenDto> addNewUser (@RequestBody RegisterRequest registerRequest) {
         try {
             userService.createUser(registerRequest);
-            Optional<User> user = userRepository.findByEmail(registerRequest.email);
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(registerRequest.email, registerRequest.password)
             );

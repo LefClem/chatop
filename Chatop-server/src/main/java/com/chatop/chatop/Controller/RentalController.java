@@ -79,15 +79,7 @@ public class RentalController {
             @RequestParam String description
     ){
         try {
-            Optional<Rental> rentalOptional = rentalRepository.findById(Long.valueOf(id));
-                if(rentalOptional.isPresent()){
-                    Rental rental = rentalOptional.get();
-                    if(rental.getOwner_id().equals(getAuthenticatedUser().getId())){
-                        rentalService.updateRental(name, surface, price, description, rental);
-                    } else {
-                        return RentalsResponseDto.builder().message("You are not authorized !").build();
-                    }
-                }
+            rentalService.updateRental(name, surface, price, description, id);
             return RentalsResponseDto.builder().message("Rental updated !").build();
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error: " + e.getMessage());

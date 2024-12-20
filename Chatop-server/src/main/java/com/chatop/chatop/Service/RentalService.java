@@ -3,6 +3,7 @@ package com.chatop.chatop.Service;
 import com.chatop.chatop.DTO.RentalsListDto;
 import com.chatop.chatop.Entity.Rental;
 import com.chatop.chatop.DTO.RentalDTO;
+import com.chatop.chatop.DTO.UserDTO;
 import com.chatop.chatop.Repository.RentalRepository;
 import com.chatop.chatop.Repository.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -26,6 +27,11 @@ public class RentalService {
     private UserRepository userRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private UserService userService;
+    private UserDTO getAuthenticatedUser(){
+        return userService.getAuthUser().get();
+    }
 
     public Rental createRental(String name, Float surface, Float price, MultipartFile picture, String description, Integer id) throws IOException {
         Rental n = new Rental();
@@ -46,16 +52,22 @@ public class RentalService {
         return rentalRepository.save(n);
     }
 
-    public String updateRental(String name, Float surface, Float price, String description, Rental rental){
-        rental.setName(name);
-        rental.setSurface(surface);
-        rental.setPrice(price);
-        rental.setDescription(description);
-        rental.setCreated_at(new Date());
-        rental.setUpdated_at(new Date());
+    public String updateRental(String name, Float surface, Float price, String description, Integer id){
+        Optional<Rental> rentalOptional = rentalRepository.findById(Long.valueOf(id));
+        if(rentalOptional.isPresent()){
+            Rental rental = rentalOptional.get();
+            if(rental.getOwner_id().equals(getAuthenticatedUser().getId())){
+                rental.setName(name);
+                rental.setSurface(surface);
+                rental.setPrice(price);
+                rental.setDescription(description);
+                rental.setUpdated_at(new Date());
 
-        rentalRepository.save(rental);
-        return "OK";
+                rentalRepository.save(rental);
+                return "OK";
+            }
+        }
+        return "You are not authorized";
     }
 
     public RentalsListDto displayRentals(){
