@@ -30,7 +30,7 @@ When you will launch the project, Spring will automatically execute the sql scri
 
 - Launch the backend
 
-Use the command mvn spring-boot:run or the start command of your IDE
+Go to the folder Chatop Server and use the command mvn spring-boot:run or the start command of your IDE
  
 
 ## Frontend
